@@ -5,6 +5,7 @@ The purpose of this project is to explore data about medical costs in various pa
 
 ## Resources
 Data Source: insurance.csv (from Codecademy)
+
 Software: Python 3.7.6
 
 ## Tableau Dashboard
