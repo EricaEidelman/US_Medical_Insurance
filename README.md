@@ -7,6 +7,9 @@ The purpose of this project is to explore data about medical costs in various pa
 Data Source: insurance.csv (from Codecademy)
 Software: Python 3.7.6
 
+## Tableau Dashboard
+https://public.tableau.com/app/profile/ee1691/viz/Insurance_Costs/CostsDashboard
+
 ## Initial Data Exploration
 The dataset was clean to begin with so there was no further cleaning needed. The first step in the data exploration was to check whether costs had any relationships with the other variables. This was achieved with simple scatterplots. While scatterplots are best for numerical (age/bmi) rather than categorical variables (sex/smoking status/region), they still were able to easily show how the patients compared against each other.
 
@@ -106,3 +109,58 @@ The resulting bar charts are shown below:
 ![This is an image](https://github.com/EricaEidelman/US_Medical_Insurance/blob/main/Images/Region_AvgCost.png)
 
 Plotting the average costs for each variable revealed several insights. First, as age and BMI increases, costs generally rise. Also, males have a somewhat higher average cost than do females, and the average costs for smokers are just over three times as much as the average costs for non-smokers. Also, the different regions have different average costs, with charges highest in the southeast, followed by the northeast, and then the northwest and southwest. This last finding led to the question of which differences in lifestyle among the four regions lead to cost differences. 
+
+## Data Exploration by Region
+In order to graph the average values of age, bmi, and number of children by region, it was first necessary to define a function which would calculate that amount. Additionally, because the sex and smoker status variables can be considered "boolean" (having only one of two possible values), it would be better to graph the percentage of smokers and males in each region as those are the groups with the higher average costs. Anothe function was needed in order to calculate the percentages. The two functions are listed below.
+
+```
+# Function to find average amount of non-boolean independent variables in each region
+def var_avg_amount(dictionary, variable):
+    region_list = unique_list(medical_records, "Region")
+    avgs_dictionary = {}
+    for region in region_list:
+        total = 0
+        length = 0
+        for record in dictionary:
+            if dictionary[record]["Region"] == region:
+                total += dictionary[record][variable]
+                length += 1
+        avg_value = round(total/length,2)
+        avgs_dictionary[region] = avg_value
+    return avgs_dictionary
+```
+
+```
+# Function to find percentage of one of boolean choices
+def bool_avg_prcnt(dictionary, variable, choice):
+    region_list = unique_list(medical_records, "Region")
+    prcnt_dict = {}
+    for region in region_list:
+        total = 0
+        length = 0
+        for record in dictionary:
+            if dictionary[record]["Region"] == region:
+                length += 1
+                if dictionary[record][variable] == choice:
+                    total += 1
+        prcnt = round((total/length)*100,2)
+        prcnt_dict[region] = prcnt
+    return prcnt_dict
+```
+
+Once these functions were defined, they could be used in conjunction with the previously defined bar chart creation functions to achieve the following charts:
+
+![This is an image](https://github.com/EricaEidelman/US_Medical_Insurance/blob/main/Images/Region_AvgAge.png)
+
+![This is an image](https://github.com/EricaEidelman/US_Medical_Insurance/blob/main/Images/Region_AvgBMI.png)
+
+![This is an image](https://github.com/EricaEidelman/US_Medical_Insurance/blob/main/Images/Region_AvgChildren.png)
+
+![This is an image](https://github.com/EricaEidelman/US_Medical_Insurance/blob/main/Images/Region_PrcntSmoker.png)
+
+![This is an image](https://github.com/EricaEidelman/US_Medical_Insurance/blob/main/Images/Region_PrcntMale.png)
+
+From the created bar charts, it is visible that the southeast region has the highest BMI as well as the highest percentage of smokers and males, all of which were previously shown to be factors contributing to higher insurance costs. The northeast region, which has the second-highest costs, likewise has the second-highest percentage of smokers and males.
+
+## Summary
+The exploratory data analysis in this project revealed that some of the more significant factors contributing to higher insurance costs are a person's BMI, smoking status, and gender. These factors reveal why the regions of the US which have higher percentages of males and smokers and higher average BMIs then have higher average costs. One conclusion which can be drawn is that reducing the rate of smoking and BMI levels will contribute to a reduction in insurance charges. Going beyond a simple descriptive analysis, further research can be done into why males have higher insurance costs than females, with the goal of reducing costs in the highest-paying regions even further.
